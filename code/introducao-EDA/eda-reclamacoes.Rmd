@@ -1,0 +1,29 @@
+---
+title: "EDA-Reclamações"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Explorando as reclamações e a avaliação
+
+Bla Bla bla
+
+```{r}
+reclamacoes <- read.csv('../../data/1-reclamacoes-selecionadas/20181610-reclamacoes-selecionadas.csv')
+avaliacao <- read.csv('../../data/3-avaliacao-humana/avaliacoes-20181030.csv')
+```
+
+### Perguntas
+
+#### Palavras mais frequentes nos titulos ?
+#### Média do tamanho de reclamações (caracteres) por orgão ?
+#### Wordcloud com palavras mais frequentes nas reclamações ?
+#### Número de palavras em caixa alta por orgão ?
+#### Mediana/moda de insatisfabilidade por orgão ?
+#### Número de caracteres médio por insatisfabilidade ?
+
+## Conclusões
+
