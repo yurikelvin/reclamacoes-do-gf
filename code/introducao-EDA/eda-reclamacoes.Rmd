@@ -5,6 +5,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
 ## Explorando as reclamações e a avaliação
@@ -12,8 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 Bla Bla bla
 
 ```{r}
-reclamacoes <- read.csv('../../data/1-reclamacoes-selecionadas/20181610-reclamacoes-selecionadas.csv')
+reclamacoes <- read.csv('../../data/1-reclamacoes-selecionadas/20181610-reclamacoes-selecionadas.csv') %>% mutate(n_char_reclamacao = nchar(as.character(reclamação)))
 avaliacao <- read.csv('../../data/3-avaliacao-humana/avaliacoes-20181030.csv')
+
+reclamacoes_by_org <- reclamacoes %>% group_by(orgao) %>% summarise(count = n(), media = mean(n_char_reclamacao), mediana = median(n_char_reclamacao))
 ```
 
 ### Perguntas
