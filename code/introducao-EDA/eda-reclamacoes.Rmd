@@ -13,20 +13,43 @@ library(tidyverse)
 Bla Bla bla
 
 ```{r}
-reclamacoes <- read.csv('../../data/1-reclamacoes-selecionadas/20181610-reclamacoes-selecionadas.csv') %>% mutate(n_char_reclamacao = nchar(as.character(reclamação)))
-avaliacao <- read.csv('../../data/3-avaliacao-humana/avaliacoes-20181030.csv')
+avaliacao <- read.csv('../../data/3-avaliacao-humana/avaliacoes-20181030.csv') %>% group_by(ID.da.reclamação) %>% summarise(media = mean(Grau.de.insatisfação), mediana = median(Grau.de.insatisfação)) %>% filter(!is.na(ID.da.reclamação))
+
+reclamacoes <- read.csv('../../data/1-reclamacoes-selecionadas/20181610-reclamacoes-selecionadas.csv') %>% mutate(n_char_reclamacao = nchar(as.character(reclamação))) %>% full_join(avaliacao, by = c('ID' = 'ID.da.reclamação')) %>% filter(!is.na(mediana)) %>% mutate(mediana_floor = floor(mediana))
 
 reclamacoes_by_org <- reclamacoes %>% group_by(orgao) %>% summarise(count = n(), media = mean(n_char_reclamacao), mediana = median(n_char_reclamacao))
+
+ggplot(reclamacoes, aes(x = as.factor(mediana_floor), y = n_char_reclamacao, colour = as.factor(mediana_floor))) + geom_boxplot() + geom_point() + labs(x = "Mediana (chão)", y = "Tamanho reclamação", colour = "Mediana (chão)")
+
+ggplot(reclamacoes, aes(x = orgao, y = n_char_reclamacao, colour = orgao)) + geom_boxplot() + geom_point()
+
+ggplot(reclamacoes, aes(x = "teste", y = media)) + geom_boxplot() + geom_point()
+
 ```
+
+## Mediana/moda de insatisfabilidade por orgão ?
+
+```{r}
+ggplot(reclamacoes, aes(x = orgao, y = media, colour = orgao)) + geom_boxplot() + geom_point()
+```
+
+## Número de caracteres por insatisfabilidade (Mediana) ?
+
+```{r}
+ggplot(reclamacoes, aes(x = as.factor(mediana_floor), y = n_char_reclamacao, colour = as.factor(mediana_floor))) + geom_boxplot() + geom_point() + labs(x = "Mediana (chão)", y = "Tamanho reclamação", colour = "Mediana (chão)")
+```
+
+## Média do tamanho de reclamações (caracteres) por orgão ?
+
+```{r}
+ggplot(reclamacoes, aes(x = orgao, y = n_char_reclamacao, colour = orgao)) + geom_boxplot() + geom_point()
+```
+
 
 ### Perguntas
 
-#### Palavras mais frequentes nos titulos ?
-#### Média do tamanho de reclamações (caracteres) por orgão ?
+#### Dispersão das avaliações (IRQ)? 
 #### Wordcloud com palavras mais frequentes nas reclamações ?
-#### Número de palavras em caixa alta por orgão ?
-#### Mediana/moda de insatisfabilidade por orgão ?
-#### Número de caracteres médio por insatisfabilidade ?
 
 ## Conclusões
 
